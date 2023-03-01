@@ -1,0 +1,637 @@
+---
+title: "Intro to Bayesian Statistics: Likelihoods, Priors & Posteriors"
+subtitle: "CSDE Workshop"
+author: "Jessica Godwin"
+date: "November 17, 2022"
+output: 
+  beamer_presentation:
+    theme: "Singapore"
+    slide_level: 2
+    toc: true
+header-includes: 
+  - \addtobeamertemplate{title page}{\includegraphics[width=1.5cm]{../Figures/W-Logo_Purple_RGB} \hfill \includegraphics[width=1.5cm]{../Figures/csdelogo}}{}
+classoption: "aspectratio=169"
+urlcolor: blue
+linkcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+```
+
+
+# Resources and Support
+
+\textbf{Texts}
+
+\begin{itemize}
+\item Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A. \& Rubin, D. B. (2013). Bayesian Data Analysis, 3rd ed. Chapman and Hall/CRC.
+
+\item McElreath, R. (2020). Statistical Rethinking: A Bayesian Course with Examples in R and Stan, 2nd ed. Chapman and Hall/CRC.
+
+\item Casella, G., \& Berger, R. L. (2002). Statistical Inference, 2nd ed. Cengage Learning.
+\end{itemize}
+# Probability Basics
+
+## Set Notation
+A \textbf{set} is a collection of elements from a population.
+
+**Examples**
+\begin{itemize}
+\item Positive Integers $\leq5: \;\; A=\{1,2,3,4,5 \}$
+\item Primary Colors: $B=\{$blue, red, yellow $\}$
+\item Odd Numbers: $C=\{1,3,5,7,9... \}$
+\end{itemize}\pause
+\vspace{3mm}
+
+A set is an **empty set** if it contains no elements: written $\emptyset$ or $D=\{ \emptyset \}$, e.g. integers that are greater than 4 and less than 1.
+\pause
+
+A set is called the **universal set** if it contains all the elements in the population, denoted $\Omega$ or $E=\{ \Omega \}$.
+
+## Intersections \& Unions
+
+\begin{itemize}
+\item The \textbf{intersection} of two sets $A,B$ is the set of all elements that are in $A$ \textbf{AND} $B$.
+\begin{itemize}
+\item The intersection is denoted $A \cap B$.
+\end{itemize}
+\item The \textbf{union} of two sets $A,B$ is the set of all elements that are in $A$ \textbf{OR} $B$.
+\begin{itemize} 
+\item The intersection is denoted $A \cup B$.
+\end{itemize}
+\end{itemize}
+
+**Examples**
+\begin{itemize}
+\item $ A=\{1,2,3,4,5 \}$, $B=\{ 2,4,6,8,10\} \Rightarrow A\cap B=\{ 2,4\}$ $A\cup B = \{ 1,2,3,4,5,6,8,10\}$
+\item $A=\{$ Odd numbers $\}$, $B=\{$ Even numbers $\} \Rightarrow A\cap B=\{ \emptyset\}$ $A\cup B=\{$All integers $\}$
+\end{itemize}
+
+
+## Sample Spaces \& Experiments
+
+\begin{itemize}
+\item An \textbf{experiment} is an action or process of observation.
+\item Once performed an experiment has only one \textbf{outcome}, but we do not know what it will be with certainty until the experiment is carried out.
+\begin{itemize}
+\item e.g. rolling a dice or flipping a coin.
+\end{itemize}
+
+\item The \textbf{sample space} is the set all the possible outcomes of the experiment and usually denoted by $S$.
+\begin{itemize} 
+\item If the experiment is rolling a die, $S=\{1,2,3,4,5,6\}$.
+\item If the experiment is flipping a coin, $S= \{$ Heads, Tails $\}$.
+\end{itemize}
+\end{itemize}  
+
+
+## Events
+An \textbf{event} is a subset of the sample space, and is a collection of one or more outcomes.
+
+Suppose we flip one coin three times.
+
+\begin{itemize}
+\item \textbf{Sample Space:} $S=\{ HHH, HHT, HTH, THH, TTH, THT, HTT, TTT \}$
+\begin{itemize}
+\item Getting 2 heads: $\{HHT, HTH, THH\}$
+\item Getting an odd number of tails: $\{HHT, HTH, THH, TTT\}$
+\item Getting more than 1 head: $\{HHH, HHT, HTH, THH\}$
+\end{itemize}
+\end{itemize}
+\pause
+Suppose we flip one coin and roll one die.
+\begin{itemize}
+\item \textbf{Sample Space:} $S=\{1H,2H,3H,4H,5H,6H,1T,2T 3T,4T,5T,6T\}$
+\begin{itemize}
+\item Rolling higher than a 4: $\{5H, 6H, 5T, 6T\}$
+\item Getting a head: $\{1H, 2H, 3H, 4H, 5H, 6H\}$
+\item Rolling a 3 or a 2: $\{2H, 3H, 2T, 3T\}$
+\end{itemize}
+\end{itemize}
+
+## Probability: Finite Sample Spaces \& Equal Probability
+
+When the sample space is finite and each outcome has equal probability, we can find the \textbf{probability} of an event by dividing the number of outcomes in the event by the size of the sample space.
+
+\begin{columns}
+\begin{column}{0.4\textwidth}
+\textbf{Example - }Rolling a fair die:
+\begin{itemize}
+\item $S=\{ 1,2,3,4,5,6 \}$
+\item $A=\{\textrm{roll}\leq 4 \}=\{ 1,2,3,4\} \Rightarrow P(A) = \dfrac{4}{6} = \dfrac{2}{3}$
+\item $B=\{\textrm{roll odd} \}=\{ 1,3,5\} \Rightarrow  P(B) = \dfrac{3}{6} = \dfrac{1}{2}$
+\end{itemize}
+\end{column}
+
+\begin{column}{0.6\textwidth}
+\begin{figure}
+\centering
+\includegraphics[scale = 0.3]{../Figures/Die_SampleSpace.pdf}
+\end{figure}
+\end{column}
+\end{columns}
+
+## Probability: Unions \& Mutually Exclusive Events
+
+When the intersection of two events is the empty set, the two events are called \textbf{mutually exclusive} and $$P(A \cup B) = P(A) + P(B).$$
+\begin{columns}
+\begin{column}{0.4\textwidth}
+\textbf{Example - }Rolling a fair die:
+\begin{itemize}
+\item $S=\{ 1,2,3,4,5,6 \}$
+\item $A=\{\textrm{roll}\leq 4 \}=\{ 1,2,3,4\} \Rightarrow P(A) = \dfrac{4}{6} = \dfrac{2}{3}$
+\item $B=\{\textrm{roll} \geq 5\}=\{ 5, 6\} \Rightarrow P(B) = \dfrac{2}{6} = \dfrac{1}{3}$
+\item $P(A \cup B) = P(A) + P(B) = \dfrac{2}{3} + \dfrac{1}{3} = 1 = \dfrac{6}{6}$
+\end{itemize}
+\end{column}
+
+\begin{column}{0.6\textwidth}
+\begin{figure}
+\centering
+\includegraphics[scale = 0.3]{../Figures/Die_MutuallyExcl_AB.pdf}
+\end{figure}
+\end{column}
+\end{columns}
+
+
+## Probability: Unions
+
+In general, the probability of the \textbf{union} of two events is $$P(A\cup B)=P(A)+P(B)-P(A\cap B).$$
+\begin{columns}
+\begin{column}{0.4\textwidth}
+\textbf{Example -} Rolling a fair die:
+\begin{itemize}
+\item $S=\{ 1,2,3,4,5,6 \}$
+\item $A=\{\textrm{roll}\leq 4 \} \Rightarrow P(A) = \dfrac{4}{6}$
+\item $B=\{ 1,3,5\} \Rightarrow P(B) = \dfrac{3}{6}$
+\item $\Rightarrow A\cap B=\{1,3\} \Rightarrow P(A\cap B) = \dfrac{2}{6}$
+\end{itemize}
+$$P(A\cup B)=P(A)+P(B)-P(A\cap B)=\dfrac{4}{6} + \dfrac{3}{6} - \dfrac{2}{6}=\dfrac{5}{6}$$
+\end{column}
+
+\begin{column}{0.6\textwidth}
+\begin{figure}
+\centering
+\includegraphics[scale = 0.3]{../Figures/Die_MutuallyExcl_Union.pdf}
+\end{figure}
+\end{column}
+\end{columns}
+
+## Probability: Conditional Probability
+
+Sometimes knowing that one event has occurred changes what you know about the probability of another event.  For example if the sidewalk is wet in the morning you might think it is more likely that it rained last night than if you didn't know anything about the sidewalk.
+
+The \textbf{conditional probability} of $A$ given $B$ is the probability that $A$ occurs given that $B$ has been observed.  It is denoted $P(A|B)$.
+
+$$ P(A|B)=\dfrac{P(A\cap B)}{P(B)}.$$
+Note, this implies another important and often used relationship of probabilities:
+
+$$ P(A \cap B) = P(A|B)\times P(B).$$
+
+## Probability: Conditional Probability - Example
+What is the probability that your roll is odd if you know that it is less than 3?
+
+\begin{columns}
+\begin{column}{.4\textwidth}
+\begin{itemize}
+\item $A=\{\textrm{odd number} \} \Rightarrow P(A) = \dfrac{3}{6}$
+\item $B=\{ \textrm{roll}< 3 \} \Rightarrow P(B) = \dfrac{2}{6}$
+\item $A\cap B=\{1\} \Rightarrow (A\cap B) = \dfrac{1}{6}$
+\end{itemize}
+\begin{align*}
+P(\textrm{Odd}|<3) =\dfrac{P(\textrm{Odd } \cap <3)}{P( <3)} =\\ \dfrac{1/6}{2/6} = \dfrac{1}{6}\times \dfrac{6}{2} = \dfrac{1}{2}.
+\end{align*}
+\end{column}
+\begin{column}{.6\textwidth}
+\includegraphics[scale = 0.3]{../Figures/Die_Conditional.pdf}
+
+\end{column}
+\end{columns}
+
+
+## Probability: Independence
+
+What if knowing $B$ does not give us any information about $A$?  That is, if $P(A|B)=P(A)$, then we say that $A$ and $B$ are \textbf{independent}.
+
+Independence also means:
+$$P(A|B)=\frac{P(A\cap B)}{P(B)}\Rightarrow P(A)=\frac{P(A\cap B)}{P(B)} \Rightarrow P(A)\cdot P(B)=P(A\cap B) $$
+
+Thus, $P(A)\cdot P(B)=P(A\cap B)$ allows us to check for independence.
+
+## Probability: Independence - Example
+
+\begin{columns}
+\begin{column}{.4\textwidth}
+Rolling a fair die:
+\begin{itemize}
+\item $A=\{1,2,3,4\} \Rightarrow P(A) = \dfrac{4}{6}$
+\item $B=\{ \textrm{odd number}  \} \Rightarrow P(B) = \dfrac{3}{6}$ 
+\item $A\cap B=\{1,3\} \Rightarrow P(A\cap B)=\dfrac{2}{6}$
+\end{itemize}
+$P(A)\cdot P(B)=\dfrac{4}{6} \cdot \dfrac{3}{6} = \dfrac{12}{36} = \dfrac{2}{6}$
+\end{column}
+\begin{column}{.6\textwidth}
+\includegraphics[scale = 0.3]{../Figures/Die_Independence.pdf}
+\end{column}
+\end{columns}  
+Knowing that you have rolled a 1, 2, 3 or 4 doesn't give you any information about whether or not you rolled an odd number (because there are 2 even and 2 odd) and vice versa.
+
+## Probability: Bayes' Rule
+Sometimes you may know one conditional probability, but not the other.  How can you use the first conditional probability to find the other one?
+
+$$P(A|B)=\frac{P(A\cap B)}{P(B)}\Rightarrow P(A|B)\cdot P(B)=P(A \cap B)$$
+
+
+$$P(B|A)=\frac{P(A\cap B)}{P(A)}\Rightarrow P(B|A)\cdot P(A)=P(A \cap B)$$
+$$ \Rightarrow P(A|B)\cdot P(B)=P(B|A)\cdot P(A) \Rightarrow
+P(A|B)=\frac{P(B|A)\cdot P(A)}{P(B)}$$
+
+
+
+
+## Probability: Bayes' Rule - Testing Example
+A disease has a prevalence of 1\% in the population.  A blood test for the disease has high sensitivity (the probability of a positive test if someone is sick) and specificity (the probability of a negative test if someone is not sick).
+\begin{itemize}
+\item If someone has the disease, there is a 98\% chance they will test positive.
+\item If someone does not have the disease, there is a 95\% chance they will test negative
+\end{itemize}
+
+Suppose you test positive for the disease and you want to figure out the probability that you have the disease.  That is, given someone has tested positive for the disease what is the chance that they have the disease?
+
+\pause
+What do we know? \pause
+\begin{itemize}
+\item $P(+| D^+)=0.98 $, $P(- | D^+)=0.02 $ \pause
+\item $P(- | D^-)=0.95 $, $P(+|D^-)=0.05 $ \pause
+\item $P(D^+)=0.01 $, $P(D^-)=0.99 $ \pause
+\end{itemize}
+
+## Probabilty: Bayes' Rule - Testing Example
+\begin{itemize}
+\item $P(+| D^+)=0.98 $, $P(- | D^+)=0.02 $ 
+\item $P(- | D^-)=0.95 $, $P(+|D^-)=0.05 $ 
+\item $P(D^+)=0.01 $, $P(D^-)=0.99 $ 
+\end{itemize}
+
+\begin{eqnarray*}
+P(D^+|+)=\frac{P(+|D^+)P(D^+)}{P(+)}&=&\frac{P(+|D^+)P(D^+)}{P(+\cap D^+)+P(+\cap D^-)}\\
+&=&\frac{P(+|D^+)P(D^+)}{P(+| D^+)P(D^+)+P(+|D^-)P( D^-)}\\
+&=&\frac{0.98\cdot 0.01}{0.98\cdot 0.01+0.05\cdot 0.99}\\
+&=&0.165\\
+\end{eqnarray*}
+
+# Likelihoods
+
+## Random Variables
+
+A \textbf{random variable} is a function which assigns a number to each element in the sample space.  (Think of it as the answer to a question you are asking about each element in the space).
+
+\begin{itemize}
+\item \textbf{Variable}, because the answer will be different for each element.
+\item \textbf{Random} because we can't predict the answer with any great certainty.
+\end{itemize}
+
+Random variables are usually denoted with capital letters, $X,Y,Z$.  Examples:
+\begin{itemize}
+\item Roll a die $\Rightarrow S=\{1, 2, \dots, 6\}$
+\begin{itemize}
+\item $X =$ the number rolled
+\item Possible values: $1, 2, \dots, 6$
+\end{itemize}
+
+\item Roll two dice: $\Rightarrow S=\{(1,1), (1,2), \dots, (6,5), (6,6) \}$
+\begin{itemize}
+\item $X =$ sum of the dice
+\item Possible values: $2, 3, 4, \dots, 12$
+\end{itemize}
+\end{itemize}
+
+## Probability Distribution
+The \textbf{probability distribution} of a random variable is a function that assigns a probability to each possible value of $X$.
+
+The probability distribution can be written as:
+\begin{table}
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+             $X$-Value & $x_1$ & $x_2$&...& $x_n$ \\ \hline
+             $P(X=x_i)$ &$p_1$ & $p_2$ & ...& $p_n$ \\ 
+             \hline
+    \end{tabular}
+\end{table}
+where each possible value $x_i$ for $X$ is listed with its probability $p_i$.  Find each $p_i$ by summing the probabilities of the elements such that $X=x_i$.
+
+
+\textbf{Example:} If we roll a die and let $X$ be the number on rolled, then
+\begin{table}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+             $X$-Value &1&2&3&4&5&6 \\ \hline
+             $P(X=x_i)$ &1/6&1/6&1/6&1/6&1/6&1/6 \\ 
+             \hline
+    \end{tabular}
+\end{table}
+
+
+## Probability Mass Functions
+The \textbf{probability distribution function} is defined differently for discrete and continuous random variables.
+
+\begin{columns}
+\begin{column}{.4\textwidth}
+\begin{itemize} 
+\item[] \textbf{Discrete Random Variables} 
+\begin{itemize}
+\item \textbf{probability mass function} (pmf)
+\item Countable number of outcomes $n$, can write down
+ $$P(X = x_i)\;\; \forall \; x_i, \;\; i = 1,\dots,n$$. 
+\end{itemize}
+\end{itemize}
+\end{column}
+\begin{column}{.6\textwidth}
+\includegraphics[scale = 0.4]{../Figures/mass.pdf}
+\end{column}
+\end{columns}
+
+
+## Probability Density Functions
+The \textbf{probability distribution function} is defined differently for discrete and continuous random variables.
+
+\begin{columns}
+\begin{column}{.4\textwidth}
+\begin{itemize}
+\item[] \textbf{Continuous Random Variables}
+\begin{itemize}
+\item  \textbf{probability density function} (pdf)
+\item Too many ($\infty$) possible values to write down.
+\item $P(X = c) = 0$ for any value of $x$.
+\item  $P(a<X<b) > 0$, if $a$ and $b$ are values $X$ can take on.  
+\end{itemize}
+\end{itemize}
+\end{column}
+\begin{column}{.6\textwidth}
+\includegraphics[scale = 0.4]{../Figures/dens.pdf}
+\end{column}
+\end{columns}
+
+## Likelihood or pmf?
+
+Let $X$ be a Binomial random variable, with $n$ independent trials and probability of success in each trial $p$. The pmf for $X$ is
+$$ P(X|n, p) = \dfrac{n!}{x!(n-x)!}p^x (1-p)^{n-x}.$$
+
+Now, suppose we flip a coin $n = 100$ times and get 57 heads, so $X = 57$. What is different?\pause
+
+$$L(p|X,n) = \dfrac{n!}{x!(n-x)!}p^x (1-p)^{n-x} = \dfrac{100!}{57!(100-57)!}p^{57} (1-p)^{100-57}$$\pause
+
+In a pmf, the \textbf{parameters} of the distribution are known and the value of the random variable or outcome of the experiment is unknown. In a \textbf{likelihood}, the value of the random variable is known, but the parameter is not.
+
+## Likelihood or pdf?
+
+Let $X_i$, $i = 1, \dots, n$ be independent, identically distribution normal random variables, with mean $\mu$ and variance $\sigma^2$. The pdf for each $X_i$ is
+$$ P(X_i|\mu, \sigma^2) = (2\pi \sigma^2)^{-1/2}\exp \left\{ -\dfrac{(x_i - \mu)^2}{2\sigma^2}\right\}.$$
+
+However, when we have $n$, $X_i$ we observed, then
+\begin{align*}
+L(\mu, \sigma^2|X_i, i = 1, \dots, n) &= \prod_{i=1}^n (2\pi \sigma^2)^{-1/2}\exp \left\{ -\dfrac{(x_i - \mu)^2}{2\sigma^2}\right\}\\
+& = (2\pi \sigma^2)^{-n/2}\exp \left\{ -\dfrac{\sum_{i=1}^n(x_i - \mu)^2}{2\sigma^2}\right\}
+\end{align*}
+
+# Likelihoods, Priors \& Posteriors
+
+## Bayes's Rule and a Bayesian model
+
+So what does Bayes' rule have to do with Bayesian statistics? Recall,
+$$P(A|B) = \dfrac{P(B|A)P(A)}{P(B)}.$$
+
+Suppose we have observations $y_i$, $i = 1, \dots, n$ and we assume they come from a probability distribution with parameters $\theta$. Our inference goal is to learn something about $\theta$ from our observed data.
+
+$$ \underbrace{P(\theta | y)}_\text{posterior} = \dfrac{\overbrace{P(y | \theta)}^\text{likelihood} \overbrace{P(\theta)}^\text{prior}}{P(y)}.$$
+
+## Bayesian modeling - Testing Example
+
+Returning to our testing example, we can consider each test a Bernoulli random variable where $X_i = 1$ with probability $p$. If we use the population prevalence of the disease, $P(D^+)$ as a \textbf{prior} on our probability of testing positive, then 
+
+$$\underbrace{P(D^+|X_i = 1)}_\text{posterior}=\dfrac{\overbrace{P(X_i = 1|D^+)}^\text{likelihood} \overbrace{P(D^+)}^\text{prior}}{\underbrace{P(X_i) = P(X_i = 1| D^+)P(D^+) +P(X_i = 1|D^-)P(D^-)}_\text{marginal distribution of the data}}.$$
+
+## Bayesian modeling
+
+\begin{itemize}
+\item In general, $P(\theta)$ is a probability distribution over possible values of $\theta$. It can be uninformative or informed by prior knowledge.
+\item The hardest part of Bayesian statistics is $P(y)$, often referred to as the \textbf{normalizing constant} or the \textbf{marginal distribution} of the data or, sometimes, the \textbf{prior predictive distribution}. $P(y)$ is the probability of seeing your data accounting for all possible values of $\theta$ in the prior.
+\end{itemize}
+
+\begin{columns}
+\begin{column}{.5\textwidth}
+\textbf{Discrete}
+$$P(\theta|y) = \dfrac{P(y|\theta)P(\theta)}{\sum_{\theta}P(y|\theta)P(\theta)}$$
+\end{column}
+\begin{column}{.5\textwidth}
+\textbf{Continuous}
+$$P(\theta|y) = \dfrac{P(y|\theta)P(\theta)}{\int_{\theta}P(y|\theta)P(\theta)d\theta}$$
+\end{column}
+\end{columns}
+
+This was easy for us to calculate in our testing example when our parameter which determined our data (disease presence) had only 2 values, but often this piece is not possible to compute by hand.
+
+## Conjugacy
+
+\begin{itemize}
+\item The property that the posterior distribution follows the same parametric form as the prior distribution is called \textbf{conjugacy}.
+\item The prior and posterior distributions that have this property with a particular likelihood are called a \textbf{conjugate family} to the likelihood.
+\end{itemize}
+
+\textbf{Examples of conjugate families:}
+\begin{table}
+\centering
+\begin{tabular}{c|c}
+\hline
+\textbf{Likelihood} & \textbf{Conjugate family} \\
+\hline \hline
+Binomial & Beta \\
+Multinomial & Dirichlet\\
+Poisson & Gamma \\ \hline
+Exponential & Gamma \\
+Normal (mean) & Normal \\ 
+Normal (mean, variance) & Normal (mean), Inverse Gamma (variance)\\ \hline
+\end{tabular}
+\end{table}
+
+## The Beta-Binomial Model
+
+Suppose we test $n = 100$ individuals for our disease we know as a 0.01 prevalence in the population, and $y = 5$ individuals test positive. If we put a $\Gamma(\alpha = 2, \beta = 2)$ prior on $p$, then
+
+\begin{columns}
+\begin{column}{.5\textwidth}
+\begin{align*}
+P(y|p, n) & = \dfrac{100!}{5!95!}p^5(1-p)^{100-5}\\
+P(p) & = \dfrac{\Gamma(2 + 2)}{\Gamma(2)\Gamma(2)}p^{2-1}(1-p)^{2-1}\\
+P(p|y, n) & = \dfrac{\Gamma((2 + 5)(2 + 100 -5))}{\Gamma(2+5)\Gamma(2+100-5)}p^{2+5-1}(1-p)^{2+100-5-1}
+\end{align*}
+\end{column}
+\begin{column}{.5\textwidth}
+\includegraphics[scale = 0.3]{../Figures/Betabinomial_22.pdf}
+\end{column}
+\end{columns}
+
+## The Beta-Binomial Model
+
+Suppose we test $n = 100$ individuals for our disease we know as a 0.01 prevalence in the population, and $y = 5$ individuals test positive. If we put a $\Gamma(\alpha = 5, \beta = 1)$ prior on $p$, then
+
+\begin{columns}
+\begin{column}{.5\textwidth}
+\begin{align*}
+P(y|p, n) & = \dfrac{100!}{5!95!}p^5(1-p)^{100-5}\\
+P(p) & = \dfrac{\Gamma(5 + 1)}{\Gamma(5)\Gamma(1)}p^{5-1}(1-p)^{1-1}\\
+P(p|y, n) & = \dfrac{\Gamma((5 + 5)(1 + 100 -5))}{\Gamma(5+5)\Gamma(1+100-5)}p^{5+5-1}(1-p)^{1+100-5-1}
+\end{align*}
+\end{column}
+\begin{column}{.5\textwidth}
+\includegraphics[scale = 0.3]{../Figures/Betabinomial_51_n100.pdf}
+\end{column}
+\end{columns}
+
+## The Beta-Binomial Model
+
+Suppose we test $n = 10$ individuals for our disease we know as a 0.01 prevalence in the population, and $y = 1$ individuals test positive. If we put a $\Gamma(\alpha = 5, \beta = 1)$ prior on $p$, then
+
+\begin{columns}
+\begin{column}{.5\textwidth}
+\begin{align*}
+P(y|p, n) & = \dfrac{10!}{1!9!}p^1(1-p)^{10-1}\\
+P(p) & = \dfrac{\Gamma(5 + 1)}{\Gamma(5)\Gamma(1)}p^{5-1}(1-p)^{1-1}\\
+P(p|y, n) & = \dfrac{\Gamma((5 + 1)(1 + 10 -1))}{\Gamma(5+1)\Gamma(1+10-1)}p^{5+1-1}(1-p)^{1+10-1-1}
+\end{align*}
+\end{column}
+\begin{column}{.5\textwidth}
+\includegraphics[scale = 0.3]{../Figures/Betabinomial_51_n10.pdf}
+\end{column}
+\end{columns}
+
+## The Beta-Binomial Model
+
+Let $X_1, \dots, X_n$ be iid Bernoulli$(p)$, so that $Y = \sum_{i=1}^n X_i \sim \mbox{Binomial}(n, p)$. If we assume $p \sim \mbox{Beta}(\alpha, \beta)$, what is the distribution of $p|y, n$.
+
+\begin{align*}
+P(p|y,n) &= \dfrac{P(y|n, p)P(p)}{P(y)} \\
+& \propto P(y|n, p)P(p) \mbox{ [drop denominator for now]}\\
+& = \underbrace{\dfrac{n!}{y!(n-y)!}p^y(1-p)^{n-y}}_\text{likelihood} \times \underbrace{\dfrac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}p^{\alpha-1}(1-p)^{\beta-1}}_\text{prior}  \\
+& \propto p^y(1-p)^{n-y} \times p^{\alpha-1}(1-p)^{\beta-1} \mbox{ [drop terms without $p$]}\\
+\end{align*}
+
+## The Beta-Binomial Model
+
+Let $X_1, \dots, X_n$ be iid Bernoulli$(p)$, so that $Y = \sum_{i=1}^n X_i \sim \mbox{Binomial}(n, p)$. If we assume $p \sim \mbox{Beta}(\alpha, \beta)$, what is the distribution of $p|y, n$.
+
+\begin{align*}
+p|y,n &\sim \mbox{Beta}(\alpha + y, \beta + n - y)\\
+E[p|y,n] &= \dfrac{\alpha + y}{\alpha + y + \beta + n - y} = \dfrac{\alpha + y}{\alpha + \beta + n}\\
+Var(p|y,n) &= \dfrac{(\alpha + y)(\beta + n - y)}{(\alpha + \beta + n)^2(\alpha + \beta + n + 1)}\\
+\end{align*}
+
+## The Normal-Normal Model
+
+Suppose I ask someone what their prior is on the age distribution in an undergraduate course I am teaching at UW. They say $\mbox{Normal}(\mu = 20, \sigma^2 = 1)$. I ask $n = 10$ or $n = 100$ students in my class their age and $\bar{y}$ = 18.5 and $s = 0.86$.
+
+\begin{columns}
+\begin{column}{.45\textwidth}
+\textbf{$n$ = 10}
+\includegraphics[scale = 0.3]{../Figures/NormalNormal_20_1_n10.pdf}
+\end{column}
+\begin{column}{0.45\textwidth}
+\textbf{$n$ = 100}
+\includegraphics[scale = 0.3]{../Figures/NormalNormal_20_1_n100.pdf}
+\end{column}
+\end{columns}
+
+## The Normal-Normal Model
+
+Suppose I ask another person what their prior is on the age distribution in an undergraduate course I am teaching at UW, and tell them it is a freshman course. They say $\mbox{Normal}(\mu = 18, \sigma^2 = 1)$. I ask $n = 10$ or $n = 100$ students in my class their age and $\bar{y}$ = 18.5 and $s = 0.86$.
+
+\begin{columns}
+\begin{column}{.45\textwidth}
+\textbf{$n$ = 10}
+\includegraphics[scale = 0.3]{../Figures/NormalNormal_18_1_n10.pdf}
+\end{column}
+\begin{column}{0.45\textwidth}
+\textbf{$n$ = 100}
+\includegraphics[scale = 0.3]{../Figures/NormalNormal_18_1_n100.pdf}
+\end{column}
+\end{columns}
+
+## The Normal-Normal Model
+
+Let $Y \sim \mbox{Normal}(\mu, \sigma^2)$, where $\sigma^2$ is known. If we assume $\mu \sim \mbox{Normal}(\theta, \tau^2)$, where $\theta$ and $\tau^2$ are known values, what is the distribution of $\mu|y, \sigma^2, \theta, \tau^2$?
+
+\begin{align*}
+P(\mu|y,\sigma^2, \theta, \tau^2) &= \dfrac{P(y|\mu, \sigma^2)P(\mu|\theta, \tau^2)}{P(y)} \\
+& \propto P(y|\mu, \sigma^2)P(\mu|\theta, \tau^2) \mbox{ [drop denominator for now]}\\
+& = \underbrace{(2\pi \sigma^2)^{-1/2}\exp\left(-\dfrac{(y - \mu)^2}{2\sigma^2}\right)}_\text{likelihood} \times \underbrace{(2\pi \tau^2)^{-1/2}\exp\left(-\dfrac{(\mu - \theta)^2}{2\tau^2}\right)}_\text{prior}  \\
+& \propto \exp\left(-\dfrac{(y - \mu)^2}{2\sigma^2}\right) \times \exp\left(-\dfrac{(\mu - \theta)^2}{2\tau^2}\right) \mbox{[drop terms without $\mu$]}\\
+\end{align*}
+
+## The Normal-Normal Model
+
+Let $Y \sim \mbox{Normal}(\mu, \sigma^2)$, where $\sigma^2$ is known. If we assume $\mu \sim \mbox{Normal}(\theta, \tau^2)$, where $\theta$ and $\tau^2$ are known values, what is the distribution of $\mu|y, \sigma^2, \theta, \tau^2$?
+
+\begin{align*}
+\mu|y,\sigma^2, \theta, \tau^2 &\sim \mbox{Normal}\left(y \times \dfrac{\tau^2}{\sigma^2 + \tau^2} + \theta \times \dfrac{\sigma^2}{\sigma^2 + \tau^2}, \dfrac{\tau^2\sigma^2}{\tau^2 + \sigma^2} \right)\\
+E[\mu|y,\sigma^2, \theta, \tau^2] &= y \times \dfrac{\tau^2}{\sigma^2 + \tau^2} + \theta \times \dfrac{\sigma^2}{\sigma^2 + \tau^2}\\
+Var(\mu|y,\sigma^2, \theta, \tau^2) &= \dfrac{\tau^2\sigma^2}{\tau^2 + \sigma^2}
+\end{align*}
+
+
+
+
+## The Normal-Normal Model
+
+Let $Y_1, \dot, Y_n \stackrel{iid}{\sim} \mbox{Normal}(\mu, \sigma^2)$, where $\sigma^2$ is known. If we assume $\mu \sim \mbox{Normal}(\theta, \tau^2)$, where $\theta$ and $\tau^2$ are known values, what is the distribution of $\mu|y, \sigma^2, \theta, \tau^2$?
+
+\begin{align*}
+P(\mu|\mathbf{y},\sigma^2, \theta, \tau^2) &= \dfrac{\prod_{i=1^n}P(y_i|\mu, \sigma^2)P(\mu|\theta, \tau^2)}{P(\mathbf{y})} \\
+& \propto \prod_{i=1^n}P(y|\mu, \sigma^2)P(\mu|\theta, \tau^2) \mbox{ [drop denominator for now]}\\
+& = \underbrace{\prod_{i=1}^n(2\pi \sigma^2)^{-1/2}\exp\left(-\dfrac{(y_i - \mu)^2}{2\sigma^2}\right)}_\text{likelihood} \times \underbrace{(2\pi \tau^2)^{-1/2}\exp\left(-\dfrac{(\mu - \theta)^2}{2\tau^2}\right)}_\text{prior}  \\
+& \propto \exp\left(-\dfrac{\sum_{i=1}^n(y_i - \mu)^2}{2\sigma^2}\right) \times \exp\left(-\dfrac{(\mu - \theta)^2}{2\tau^2}\right) \mbox{[drop terms without $\mu$]}\\
+\end{align*}
+
+
+## The Normal-Normal Model
+
+Let $Y_1, \dots, Y_n \stackrel{iid}{\sim} \mbox{Normal}(\mu, \sigma^2)$, where $\sigma^2$ is known. If we assume $\mu \sim \mbox{Normal}(\theta, \tau^2)$, where $\theta$ and $\tau^2$ are known values, what is the distribution of $\mu|y, \sigma^2, \theta, \tau^2$?
+
+\begin{align*}
+\mu|\mathbf{y},\sigma^2, \theta, \tau^2 &\sim \mbox{Normal}\left(\bar{y} \times \dfrac{n\tau^2}{\sigma^2 + n\tau^2} + \theta \times \dfrac{\sigma^2}{\sigma^2 + n\tau^2}, \dfrac{\tau^2\sigma^2}{n\tau^2 + \sigma^2} \right)\\
+E[\mu|\mathbf{y},\sigma^2, \theta, \tau^2] & = \bar{y} \times \dfrac{n\tau^2}{\sigma^2 + n\tau^2} + \theta \times \dfrac{\sigma^2}{\sigma^2 + n\tau^2}\\
+Var(\mu|\mathbf{y}, \sigma^2, \theta, \tau^2) &= \dfrac{\tau^2\sigma^2}{n\tau^2 + \sigma^2}
+\end{align*}
+
+## The Normal-Normal Model
+
+Let $Y_1, \dots, Y_n \stackrel{iid}{\sim} \mbox{Normal}(\beta_0 + \beta_1 X_i, \sigma^2)$, where $\sigma^2$ is known. If we assume $\beta \sim \mbox{Normal}(\theta, \Sigma_{\theta})$, where $\theta = [\begin{array}{cc}\theta_0 & \theta_1\end{array}]$ and $\Sigma_{\theta}$ are known values, what is the distribution of $\beta|y, \sigma^2, \theta, \Sigma_{\theta}$ where $\beta = [\begin{array}{cc}\beta_0 & \beta_1\end{array}]$?
+
+\begin{align*}
+P(\beta|\mathbf{y},\mathbf{x},\sigma^2, \theta, \Sigma) &= \dfrac{\prod_{i=1^n}P(y_i|x_i, \beta \sigma^2)P(\beta|\theta, \Sigma)}{P(\mathbf{y})} \\
+& \propto \prod_{i=1^n}P(y|x_i, \beta, \sigma^2)P(\beta|\theta, \Sigma) \mbox{ [drop denominator for now]}\\
+& = \underbrace{\prod_{i=1}^n(2\pi \sigma^2)^{-1/2}\exp\left(-\dfrac{(y_i - x_i^T \beta)^2}{2\sigma^2}\right)}_\text{likelihood} \\
+&\times \underbrace{(2\pi |\Sigma|)^{-1/2}\exp\left(-\frac{1}{2}(\beta - \theta)^T \Sigma^{-1}(\beta- \theta)\right)}_\text{prior}  \\
+\end{align*}
+
+## The Normal-Normal Model
+
+Let $Y_1, \dots, Y_n \stackrel{iid}{\sim} \mbox{Normal}(\beta_0 + \beta_1 X_i, \sigma^2)$, where $\sigma^2$ is known. If we assume $\beta \sim \mbox{Normal}(\theta, \Sigma_{\theta})$, where $\theta = [\begin{array}{cc}\theta_0 & \theta_1\end{array}]$ and $\Sigma_{\theta}$ are known values, what is the distribution of $\beta|y, \sigma^2, \theta, \Sigma_{\theta}$ where $\beta = [\begin{array}{cc}\beta_0 & \beta_1\end{array}]$?
+
+\begin{align*}
+P(\beta|\mathbf{y},\mathbf{x},\sigma^2, \theta, \Sigma) & \propto \exp\left(-\frac{1}{2}(y - \mathbf{x}^T\beta)^T\Sigma^{-1}(y - \mathbf{x}^T\beta)\right) \\
+& \times \exp\left(-\frac{1}{2}(\beta - \theta)^T \Sigma^{-1}(\beta- \theta)\right) \mbox{[drop terms without $\beta$]}\\
+\end{align*}
+
+
+## The Normal-Normal Model
+
+Let $Y_1, \dots, Y_n \stackrel{iid}{\sim} \mbox{Normal}(\beta_0 + \beta_1 X_i, \sigma^2)$, where $\sigma^2$ is known. If we assume $\beta \sim \mbox{Normal}(\theta, \Sigma_{\theta})$, where $\theta = [\begin{array}{cc}\theta_0 & \theta_1\end{array}]$ and $\Sigma_{\theta}$ are known values, what is the distribution of $\beta|y, \sigma^2, \theta, \Sigma_{\theta}$ where $\beta = [\begin{array}{cc}\beta_0 & \beta_1\end{array}]$?
+
+\begin{align*}
+P(\beta|\mathbf{y},\mathbf{x},\sigma^2, \theta, \Sigma) &\sim \mbox{Normal} \left( \left[\Sigma_{\theta} + \dfrac{\sum_{i=1}^n x_i^2}{\sigma^2}\right]^{-1} \dfrac{\sum_{i=1}^n x_iy_i}{\sigma^2}, \left[\Sigma_{\theta} + \dfrac{\sum_{i=1}^n x_i^2}{\sigma^2}\right]^{-1}\right) \\
+P(\beta|\mathbf{y},\mathbf{x},\sigma^2, \theta, \Sigma) &\sim \mbox{Normal} \left( \left[\Sigma_{\theta} + \Sigma^{-1}\mathbf{x}^T\mathbf{x}\right]^{-1}\Sigma^{-1}\mathbf{x}^T\mathbf{y}, \left[\Sigma_{\theta} + \Sigma^{-1}\mathbf{x}^T\mathbf{x}\right]^{-1}\right) \\
+E[\beta|\mathbf{y},\mathbf{x},\sigma^2, \theta, \Sigma] &=  \left[\Sigma_{\theta} + \Sigma^{-1}\mathbf{x}^T\mathbf{x}\right]^{-1}\Sigma^{-1}\mathbf{x}^T\mathbf{y} \\
+Var(\beta|\mathbf{y},\mathbf{x},\sigma^2, \theta, \Sigma) &= \left[\Sigma_{\theta} + \Sigma^{-1}\mathbf{x}^T\mathbf{x}\right]^{-1}\\
+\end{align*}
+
