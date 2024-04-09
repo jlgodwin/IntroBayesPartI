@@ -181,7 +181,7 @@ plot_beta_binomial(
   prior = TRUE,
   likelihood = TRUE,
   posterior = TRUE
-)
+) + theme_classic()
 dev.off()
 
 pdf("BetaBinomial_51_n10.pdf")
@@ -193,7 +193,7 @@ plot_beta_binomial(
   prior = TRUE,
   likelihood = TRUE,
   posterior = TRUE
-)
+) + theme_classic()
 dev.off()
 pdf("BetaBinomial_51_n100.pdf")
 plot_beta_binomial(
@@ -204,7 +204,7 @@ plot_beta_binomial(
   prior = TRUE,
   likelihood = TRUE,
   posterior = TRUE
-)
+)  + theme_classic()
 dev.off()
 
 ## Normal Normal ####
@@ -223,7 +223,7 @@ plot_normal_normal(
   prior = TRUE,
   likelihood = TRUE,
   posterior = TRUE
-)
+)  + theme_classic()
 dev.off()
 
 pdf("NormalNormal_18_1_n10.pdf")
@@ -236,7 +236,7 @@ plot_normal_normal(
   prior = TRUE,
   likelihood = TRUE,
   posterior = TRUE
-)
+)  + theme_classic()
 dev.off()
 
 pdf("NormalNormal_20_1_n10.pdf")
@@ -249,7 +249,7 @@ plot_normal_normal(
   prior = TRUE,
   likelihood = TRUE,
   posterior = TRUE
-)
+)  + theme_classic()
 dev.off()
 
 
@@ -263,5 +263,61 @@ plot_normal_normal(
   prior = TRUE,
   likelihood = TRUE,
   posterior = TRUE
-)
+)  + theme_classic()
+dev.off()
+
+
+pdf("NormalNormal_0_10_n10.pdf")
+plot_normal_normal(
+  mean = 0,
+  sd = 10,
+  y_bar =  18.5,
+  sigma = .87,
+  n = 10,
+  prior = TRUE,
+  likelihood = TRUE,
+  posterior = TRUE
+)  + theme_classic()
+dev.off()
+
+
+pdf("NormalNormal_0_10_n100.pdf")
+plot_normal_normal(
+  mean = 0,
+  sd = 10,
+  y_bar =  18.5,
+  sigma = .87,
+  n = 100,
+  prior = TRUE,
+  likelihood = TRUE,
+  posterior = TRUE
+)  + theme_classic()
+dev.off()
+
+
+pdf("NormalNormal_0_1_n10.pdf")
+plot_normal_normal(
+  mean = 0,
+  sd = 1,
+  y_bar =  18.5,
+  sigma = .87,
+  n = 10,
+  prior = TRUE,
+  likelihood = TRUE,
+  posterior = TRUE
+)  + theme_classic()
+dev.off()
+
+
+pdf("NormalNormal_0_1_n100.pdf")
+plot_normal_normal(
+  mean = 0,
+  sd = 1,
+  y_bar =  18.5,
+  sigma = .87,
+  n = 100,
+  prior = TRUE,
+  likelihood = TRUE,
+  posterior = TRUE
+)  + theme_classic()
 dev.off()
